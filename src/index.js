@@ -1,12 +1,16 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import userRouter from "./routes/users.js";
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+// Routers
+app.use("/auth", userRouter);
 
 const database = "Recipe";
 const connectionString = `mongodb+srv://admin:${process.env.MONGODB_PW}@backend.ujrbyvo.mongodb.net/${database}?retryWrites=true&w=majority&appName=Backend`;
