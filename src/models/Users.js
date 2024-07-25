@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  savedRecipes: [{ type: mongoose.SchemaTypes.ObjectId, ref: "recipes" }],
 });
 
-export const UserModel = mongoose.model("User", UserSchema);
+export const UserModel = mongoose.model("users", UserSchema);
