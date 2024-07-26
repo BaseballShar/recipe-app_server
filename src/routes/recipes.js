@@ -17,6 +17,7 @@ recipeRouter.get("/", async (req, res) => {
 recipeRouter.post("/", async (req, res) => {
   try {
     const recipe = await RecipeModel.create(req.body);
+    console.log(recipe);
     res.status(201).send(recipe);
   } catch (e) {
     res.status(500).send({ message: e.message });
@@ -38,9 +39,9 @@ recipeRouter.put("/", async (req, res) => {
 });
 
 // Returns all saved recipesID given the userID
-recipeRouter.get("/savedRecipes/ids", async (req, res) => {
+recipeRouter.get("/savedRecipes/ids/:userID", async (req, res) => {
   try {
-    const user = await UserModel.findById(req.body.userID);
+    const user = await UserModel.findById(req.params.userID);
     res.status(200).send({ savedRecipes: user?.savedRecipes });
   } catch (e) {
     res.status(500).send({ message: e.message });
@@ -48,13 +49,13 @@ recipeRouter.get("/savedRecipes/ids", async (req, res) => {
 });
 
 // Returns all saved recipes given the userID
-recipeRouter.get("/savedRecipes", async (req, res) => {
+recipeRouter.get("/savedRecipes/:userID", async (req, res) => {
   try {
-    const user = await UserModel.findById(req.body.userID);
+    const user = await UserModel.findById(req.params.userID);
     const savedRecipes = await RecipeModel.find({
       _id: { $in: user.savedRecipes },
     });
-    res.status(200).send(savedRecipes);
+    res.status(200).send({ savedRecipes });
   } catch (e) {
     res.status(500).send({ message: e.message });
   }
