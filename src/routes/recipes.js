@@ -1,6 +1,7 @@
 import express from "express";
 import { RecipeModel } from "../models/Recipes.js";
 import { UserModel } from "../models/Users.js";
+import { verifyToken } from "./users.js";
 
 const recipeRouter = express.Router();
 
@@ -14,7 +15,7 @@ recipeRouter.get("/", async (req, res) => {
 });
 
 // Saves a recipes
-recipeRouter.post("/", async (req, res) => {
+recipeRouter.post("/", verifyToken, async (req, res) => {
   try {
     const recipe = await RecipeModel.create(req.body);
     console.log(recipe);
@@ -25,7 +26,7 @@ recipeRouter.post("/", async (req, res) => {
 });
 
 // Links a saved recipe to a registered user
-recipeRouter.put("/", async (req, res) => {
+recipeRouter.put("/", verifyToken, async (req, res) => {
   try {
     const recipe = await RecipeModel.findById(req.body.recipeID);
     const user = await UserModel.findById(req.body.userID);
