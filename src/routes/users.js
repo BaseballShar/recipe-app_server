@@ -72,4 +72,17 @@ userRouter.get("/", async (req, res) => {
   }
 });
 
+// Middleware for verifying the user
+export function verifyToken(req, res, next) {
+  const token = req.headers.authorisation;
+  // Catch for no token
+  if (!token) return res.sendStatus(401);
+
+  // Has token
+  jwt.verify(token, process.env.SESSION_SECRET, (error) => {
+    if (error) return res.sendStatus(403);
+    next();
+  });
+}
+
 export default userRouter;
