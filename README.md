@@ -31,7 +31,7 @@ This backend is hosted locally in port 3001. This port number can be modified in
 5. Use your preferred API tester to verify the server is error-free, e.g. [HTTPIE](https://github.com/httpie/cli)
 
 # Related Resources
-The frontend of this server can be founded at [BaseballShar/recipe-app_client](https://github.com/BaseballShar/recipe-app_client).
+The frontend of this server can be found at [BaseballShar/recipe-app_client](https://github.com/BaseballShar/recipe-app_client).
 
 # Credits
 This project is inspired by the tutorial [MERN Recipe App With Authentication - PedroTech](https://www.youtube.com/watch?v=P43DW3HUUH8). However, I have made improvements to the code quality and continued developing the application beyond the video.
