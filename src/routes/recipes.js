@@ -28,16 +28,32 @@ recipeRouter.post("/", verifyToken, async (req, res) => {
 // Links a saved recipe to a registered user
 recipeRouter.put("/", verifyToken, async (req, res) => {
   try {
-    const recipe = await RecipeModel.findById(req.body.recipeID);
     const user = await UserModel.findById(req.body.userID);
-    // user.savedRecipes.push(recipe);
-    user.savedRecipes.push(recipe._id);
+    user.savedRecipes.push(req.body.recipeID);
     await user.save();
     res.status(201).send({ savedRecipes: user.savedRecipes });
   } catch (e) {
     res.status(500).send({ message: e.message });
   }
 });
+
+// Deletes a saved recipe to a registered user
+recipeRouter.delete(
+  "/userID/:userID/recipeID/:recipeID",
+  verifyToken,
+  async (req, res) => {
+    try {
+      const user = await UserModel.findById(req.params.userID);
+      user.savedRecipes = user.savedRecipes.filter(
+        (id) => id != req.params.recipeID,
+      );
+      await user.save();
+      res.status(200).send({ savedRecipes: user.savedRecipes });
+    } catch (e) {
+      res.status(500).send({ message: e.message });
+    }
+  },
+);
 
 // Returns all saved recipesID given the userID
 recipeRouter.get("/savedRecipes/ids/:userID", async (req, res) => {
