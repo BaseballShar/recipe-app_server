@@ -1,11 +1,13 @@
+import bcrypt from "bcrypt";
 import express from "express";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import { UserModel } from "../models/Users.js";
 
+// Mounted at /auth
 const userRouter = express.Router();
 
-// Actual endpoints mounted at /auth
+// Endpoint for registering a new user
+// Request body: username, password
 userRouter.post("/register", async (req, res) => {
   try {
     // Catch for incorrect request body structure
@@ -36,6 +38,8 @@ userRouter.post("/register", async (req, res) => {
   }
 });
 
+// Endpoint for logining in and authenticating user
+// Request body: username, password
 userRouter.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -55,6 +59,7 @@ userRouter.post("/login", async (req, res) => {
     }
 
     // Login successful
+    // Return jwt token used for authentication
     const token = jwt.sign({ id: user._id }, process.env.SESSION_SECRET);
     res.status(200).send({ token, userID: user._id });
   } catch (e) {
@@ -62,8 +67,8 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
-// Testing endpoints
-userRouter.get("/", async (req, res) => {
+// Endpoint for returning all user accounts
+userRouter.get("/", async (_, res) => {
   try {
     const data = await UserModel.find();
     res.status(200).send(data);
@@ -72,7 +77,7 @@ userRouter.get("/", async (req, res) => {
   }
 });
 
-// Middleware for verifying the user
+// Middleware for verifying the user identity
 export function verifyToken(req, res, next) {
   const token = req.headers.authorisation;
   // Catch for no token

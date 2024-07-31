@@ -3,9 +3,11 @@ import { RecipeModel } from "../models/Recipes.js";
 import { UserModel } from "../models/Users.js";
 import { verifyToken } from "./users.js";
 
+// Mounted at /recipes
 const recipeRouter = express.Router();
 
-recipeRouter.get("/", async (req, res) => {
+// Endpoint for returning all stored recipes
+recipeRouter.get("/", async (_, res) => {
   try {
     const data = await RecipeModel.find();
     res.status(200).send(data);
@@ -14,7 +16,8 @@ recipeRouter.get("/", async (req, res) => {
   }
 });
 
-// Saves a recipe
+// Endpoint for saving a new recipe
+// Request body: The recipe object containing all required fields
 recipeRouter.post("/", verifyToken, async (req, res) => {
   try {
     const recipe = await RecipeModel.create(req.body);
@@ -25,7 +28,8 @@ recipeRouter.post("/", verifyToken, async (req, res) => {
   }
 });
 
-// Links a saved recipe to a registered user
+// Endpoint for linking a saved recipe to a user
+// Request body: userID, recipeID
 recipeRouter.put("/", verifyToken, async (req, res) => {
   try {
     const user = await UserModel.findById(req.body.userID);
@@ -37,7 +41,8 @@ recipeRouter.put("/", verifyToken, async (req, res) => {
   }
 });
 
-// Edits a recipe
+// Endpoint for editing a recipe
+// Request body: The updated recipe object
 recipeRouter.put("/edit", verifyToken, async (req, res) => {
   try {
     const recipeID = req.body.recipe._id;
@@ -49,7 +54,8 @@ recipeRouter.put("/edit", verifyToken, async (req, res) => {
   }
 });
 
-// Deletes a saved recipe to a registered user
+// Endpoint for unsaving a saved recipe
+// Request params: userID, recipeID
 recipeRouter.delete(
   "/userID/:userID/recipeID/:recipeID",
   verifyToken,
@@ -67,7 +73,8 @@ recipeRouter.delete(
   },
 );
 
-// Returns all saved recipesID given the userID
+// Endpoint for returning all saved recipesID from a user
+// Request params: userID
 recipeRouter.get("/savedRecipes/ids/:userID", async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userID);
@@ -77,7 +84,8 @@ recipeRouter.get("/savedRecipes/ids/:userID", async (req, res) => {
   }
 });
 
-// Returns all saved recipes given the userID
+// Endpoint for returning all saved recipes from a user
+// Request params: userID
 recipeRouter.get("/savedRecipes/:userID", async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userID);
