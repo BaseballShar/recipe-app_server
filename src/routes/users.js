@@ -34,7 +34,7 @@ userRouter.post("/register", async (req, res) => {
       .status(201)
       .send({ message: "User created successfully", response: result });
   } catch (e) {
-    res.status(500).send({ message: e.message });
+    res.send({ message: e.message });
   }
 });
 
@@ -61,9 +61,9 @@ userRouter.post("/login", async (req, res) => {
     // Login successful
     // Return jwt token used for authentication
     const token = jwt.sign({ id: user._id }, process.env.SESSION_SECRET);
-    res.status(200).send({ token, userID: user._id });
+    res.send({ token, userID: user._id });
   } catch (e) {
-    res.status(500).send({ message: e.message });
+    res.send({ message: e.message });
   }
 });
 
@@ -71,9 +71,9 @@ userRouter.post("/login", async (req, res) => {
 userRouter.get("/", async (_, res) => {
   try {
     const data = await UserModel.find();
-    res.status(200).send(data);
+    res.send(data);
   } catch (e) {
-    res.status(500).send({ message: e.message });
+    res.send({ message: e.message });
   }
 });
 
