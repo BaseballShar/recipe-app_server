@@ -14,7 +14,7 @@ recipeRouter.get("/", async (req, res) => {
   }
 });
 
-// Saves a recipes
+// Saves a recipe
 recipeRouter.post("/", verifyToken, async (req, res) => {
   try {
     const recipe = await RecipeModel.create(req.body);
@@ -32,6 +32,18 @@ recipeRouter.put("/", verifyToken, async (req, res) => {
     user.savedRecipes.push(req.body.recipeID);
     await user.save();
     res.status(201).send({ savedRecipes: user.savedRecipes });
+  } catch (e) {
+    res.status(500).send({ message: e.message });
+  }
+});
+
+// Edits a recipe
+recipeRouter.put("/edit", verifyToken, async (req, res) => {
+  try {
+    const recipeID = req.body.recipe._id;
+    await RecipeModel.findByIdAndUpdate(recipeID, req.body.recipe);
+    const updatedRecipe = await RecipeModel.findById(recipeID);
+    res.status(200).send({ updatedRecipe });
   } catch (e) {
     res.status(500).send({ message: e.message });
   }
