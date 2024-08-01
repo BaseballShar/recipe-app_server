@@ -47,7 +47,7 @@ recipeRouter.get("/savedRecipes/:userID", async (req, res) => {
 // Request body: The recipe object containing all required fields
 recipeRouter.post("/", verifyToken, async (req, res) => {
   try {
-    const recipe = await RecipeModel.create(req.body);
+    const recipe = await RecipeModel.create(req.body.recipe);
     res.status(201).send(recipe);
   } catch (e) {
     res.send({ message: e.message });
